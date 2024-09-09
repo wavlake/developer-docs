@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  description: "Wavlake Developer API docs. You can find out more about\
+  description: Wavlake Developer API docs. You can find out more about\
     \ Wavlake at [http://wavlake.com](http://wavlake.com) or contact us to request an application ID. \
   version: "1.0"
   title: "Wavlake Developer API"
