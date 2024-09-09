@@ -11,6 +11,11 @@ info:
 host: "wavlake.com"
 basePath: "/api/v1"
 tags:
+  - name: "content"
+    description: "Wavlake content metadata service"
+    externalDocs:
+      description: "Wavlake Content API"
+      url: "http://wavlake.com"
   - name: "lnurl"
     description: "LNURL service"
     externalDocs:
@@ -23,15 +28,15 @@ paths:
     get:
       tags:
         - "content"
-      summary: "Retrieves metadata for Wavlake content"
-      description: "Retrieve details for a specific piece of Wavlake content (e.g. a track, album)."
-      operationId: "getContentById"
+      summary: "Retrieves metadata for a Wavlake track by trackId"
+      description: "Retrieve artist, album, and track metadata for a specific Wavlake track by trackId."
+      operationId: "getTrackById"
       produces:
         - "application/json"
       parameters:
         - name: "trackId"
           in: "path"
-          description: "GUID for Wavlake content (e.g. a track, episode, album) for which to retrieve metadata."
+          description: "GUID for track"
           required: true
           type: "string"
           format: "uuid"
@@ -42,6 +47,58 @@ paths:
             $ref: "#/definitions/TrackResponse"
         400:
           description: "Invalid ID or no such track"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /content/album/{albumId}:
+    get:
+      tags:
+        - "content"
+      summary: "Retrieves metadata for a Wavlake album by albumId"
+      description: "Retrieve all the tracks and album metadata for a specific Wavlake album by albumId."
+      operationId: "getAlbumById"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "albumId"
+          in: "path"
+          description: "GUID for album"
+          required: true
+          type: "string"
+          format: "uuid"
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/AlbumResponse"
+        400:
+          description: "Invalid ID or no such album"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    /content/artist/{artistId}:
+      get:
+        tags:
+          - "content"
+        summary: "Retrieves metadata for a Wavlake artist by artistId"
+        description: "Retrieve all the albums and artist metadata for a specific Wavlake artist by artistId."
+        operationId: "getArtistById"
+        produces:
+          - "application/json"
+        parameters:
+          - name: "artistId"
+            in: "path"
+            description: "GUID for artist"
+            required: true
+            type: "string"
+            format: "uuid"
+        responses:
+          200:
+            description: "success"
+            schema:
+              $ref: "#/definitions/ArtistResponse"
+          400:
+            description: "Invalid ID or no such artist"
+            schema:
+              $ref: "#/definitions/ErrorResponse"
   /lnurl:
     get:
       tags:
@@ -68,6 +125,10 @@ paths:
           description: "success"
           schema:
             $ref: "#/definitions/LnurlResponse"
+        400:
+          description: "Invalid contentId or appId"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /pet:
     post:
       tags:
@@ -583,19 +644,48 @@ paths:
       responses:
         default:
           description: "successful operation"
-securityDefinitions:
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
-  petstore_auth:
-    type: "oauth2"
-    authorizationUrl: "https://petstore.swagger.io/oauth/authorize"
-    flow: "implicit"
-    scopes:
-      read:pets: "read your pets"
-      write:pets: "modify pets in your account"
+# securityDefinitions:
+#   api_key:
+#     type: "apiKey"
+#     name: "api_key"
+#     in: "header"
+#   petstore_auth:
+#     type: "oauth2"
+#     authorizationUrl: "https://petstore.swagger.io/oauth/authorize"
+#     flow: "implicit"
+#     scopes:
+#       read:pets: "read your pets"
+#       write:pets: "modify pets in your account"
 definitions:
+  ArtistResponse:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      name:
+        type: "string"
+      bio:
+        type: "string"
+      artistArtUrl:
+        type: "string"
+      albums:
+        type: "array"
+        items:
+          $ref: "#/definitions/AlbumsSummaryResponse"
+  AlbumsSummaryResponse:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      title:
+        type: "string"
+      albumArtUrl:
+        type: "string"
+      releaseDate:
+        type: "string"
+        format: "date-time"
   TrackResponse:
     type: "object"
     properties:
@@ -623,10 +713,43 @@ definitions:
       releaseDate:
         type: "string"
         format: "date-time"
+  AlbumResponse:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      title:
+        type: "string"
+      artist:
+        type: "string"
+      artistUrl:
+        type: "string"
+      artistArtUrl:
+        type: "string"
+      albumArtUrl:
+        type: "string"
+      releaseDate:
+        type: "string"
+        format: "date-time"
+      tracks:
+        type: "array"
+        items:
+          $ref: "#/definitions/TrackResponse"
   LnurlResponse:
     type: "object"
     properties:
       payRequest:
+        type: "string"
+  ErrorResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      success:
+        type: "boolean"
+      error:
         type: "string"
   ApiResponse:
     type: "object"
