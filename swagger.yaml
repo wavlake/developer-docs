@@ -1,7 +1,8 @@
 ---
 swagger: "2.0"
 info:
-  description: Wavlake Developer API docs. You can find out more about\
+  description:
+    Welcome to the Wavlake Developer API docs. You can find out more about
     \ Wavlake at [http://wavlake.com](http://wavlake.com) or contact us to request an application ID. \
   version: "1.0"
   title: "Wavlake Developer API"
@@ -18,6 +19,29 @@ tags:
 schemes:
   - "https"
 paths:
+  /content/track/{trackId}:
+    get:
+      tags:
+        - "content"
+      summary: "Retrieves metadata for Wavlake content"
+      description: "Retrieve details for a specific piece of Wavlake content (e.g. a track, album)."
+      operationId: "getContentById"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "trackId"
+          in: "path"
+          description: "GUID for Wavlake content (e.g. a track, episode, album) for which to retrieve metadata."
+          required: true
+          type: "string"
+          format: "uuid"
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/TrackResponse"
+        400:
+          description: "Invalid ID or no such track"
   /lnurl:
     get:
       tags:
@@ -41,7 +65,7 @@ paths:
           type: "string"
       responses:
         200:
-          description: "successful operation"
+          description: "success"
           schema:
             $ref: "#/definitions/LnurlResponse"
   /pet:
@@ -572,6 +596,33 @@ securityDefinitions:
       read:pets: "read your pets"
       write:pets: "modify pets in your account"
 definitions:
+  TrackResponse:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      title:
+        type: "string"
+      albumTitle:
+        type: "string"
+      artist:
+        type: "string"
+      artistId:
+        type: "string"
+        format: "uuid"
+      artistArtUrl:
+        type: "string"
+      albumArtUrl:
+        type: "string"
+      mediaUrl:
+        type: "string"
+      duration:
+        type: "integer"
+        format: "int32"
+      releaseDate:
+        type: "string"
+        format: "date-time"
   LnurlResponse:
     type: "object"
     properties:
