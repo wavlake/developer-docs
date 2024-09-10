@@ -334,6 +334,9 @@ definitions:
       artistId:
         type: "string"
         format: "uuid"
+      albumId:
+        type: "string"
+        format: "uuid"
       artistArtUrl:
         type: "string"
       albumArtUrl:
@@ -348,6 +351,11 @@ definitions:
         format: "date-time"
       msatTotal:
         type: "string"
+      artistNpub:
+        type: "string"
+      order:
+        type: "integer"
+        format: "int32"
   AlbumResponse:
     type: "object"
     properties:
