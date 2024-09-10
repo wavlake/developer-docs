@@ -66,6 +66,7 @@ paths:
           type: "enum"
           enum:
             - "sats"
+          default: "sats"
         - name: "startDate"
           in: "query"
           description: "Start date for rankings query"
