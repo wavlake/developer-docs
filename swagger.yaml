@@ -6,7 +6,8 @@ info:
   title: "Wavlake Developer API"
   contact:
     email: "contact@wavlake.com"
-host: "wavlake.com"
+# host: "wavlake.com"
+host: "https://wavlake-com-git-create-dev-api-wavlake.vercel.app"
 basePath: "/api/v1"
 tags:
   - name: "content"
@@ -344,6 +345,8 @@ definitions:
       releaseDate:
         type: "string"
         format: "date-time"
+      msatTotal:
+        type: "string"
   AlbumResponse:
     type: "object"
     properties:
