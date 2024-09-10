@@ -63,7 +63,7 @@ paths:
           in: "query"
           description: "Metric to sort by"
           required: true
-          type: "enum"
+          type: "string"
           enum:
             - "sats"
           default: "sats"
