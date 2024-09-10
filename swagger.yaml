@@ -48,6 +48,67 @@ paths:
           description: "Invalid search query"
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /content/rankings:
+    get:
+      tags:
+        - "content"
+      summary: "Retrieve customized Wavlake rankings"
+      description: "Retrieve a list of Wavlake tracks ranked by sats earned over a specific time period. A date window is required, and can be one of either `days` or `startDate` and `endDate`. Optionally filter by genre and limit the number of tracks returned. List of genres can be found at: https://github.com/wavlake/genre-list"
+      operationId: "getRanking"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "sort"
+          in: "query"
+          description: "Metric to sort by"
+          required: true
+          type: "enum"
+          enum:
+            - "sats"
+        - name: "startDate"
+          in: "query"
+          description: "Start date for rankings query"
+          required: false
+          type: "string"
+          format: "date"
+        - name: "endDate"
+          in: "query"
+          description: "End date for rankings query"
+          required: false
+          type: "string"
+          format: "date"
+        - name: "days"
+          in: "query"
+          description: "Number of days to include in rankings query"
+          required: false
+          type: "integer"
+          format: "int32"
+          minimum: 1
+          maximum: 90
+        - name: "genre"
+          in: "query"
+          description: "Genre to filter rankings by"
+          required: false
+          type: "string"
+        - name: "limit"
+          in: "query"
+          description: "Number of tracks to return"
+          required: false
+          type: "integer"
+          format: "int32"
+          minimum: 1
+          maximum: 100
+      responses:
+        200:
+          description: "success"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/TrackResponse"
+        400:
+          description: "Invalid rankings query"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /content/track/{trackId}:
     get:
       tags:
