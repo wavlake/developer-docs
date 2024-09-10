@@ -7,7 +7,7 @@ info:
   contact:
     email: "contact@wavlake.com"
 # host: "wavlake.com"
-host: "https://wavlake-com-git-create-dev-api-wavlake.vercel.app"
+host: "wavlake-com-git-create-dev-api-wavlake.vercel.app"
 basePath: "/api/v1"
 tags:
   - name: "content"
