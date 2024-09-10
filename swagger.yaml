@@ -270,6 +270,24 @@ definitions:
         type: "string"
       artistArtUrl:
         type: "string"
+      albumId:
+        type: "string"
+        format: "uuid"
+        required: false
+      albumTitle:
+        type: "string"
+        required: false
+      artistId:
+        type: "string"
+        format: "uuid"
+        required: false
+      artist:
+        type: "string"
+        required: false
+      duration:
+        type: "integer"
+        format: "int32"
+        required: false
   ArtistResponse:
     type: "object"
     properties:
