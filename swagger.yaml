@@ -382,7 +382,7 @@ definitions:
   PlaylistResponse:
     type: "object"
     properties:
-      id:
+      userId:
         type: "string"
         format: "uuid"
       title:
