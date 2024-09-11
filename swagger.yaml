@@ -230,7 +230,7 @@ paths:
         - name: "appId"
           in: "query"
           description: "Unique id of application developer"
-          required: false
+          required: true
           type: "string"
       responses:
         200:
