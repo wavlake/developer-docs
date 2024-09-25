@@ -216,7 +216,7 @@ paths:
       tags:
         - "lnurl"
       summary: "Retrieves an LNURL string"
-      description: "Retrieve an LNURL pay request string for a specific piece of Wavlake content (e.g. a track) with an optional appId param for developers interested in receiving payment splits."
+      description: "Retrieve an LNURL pay request string for a specific piece of Wavlake content (e.g. a track) with an appId param for developers interested in receiving payment splits."
       operationId: "getLnurl"
       produces:
         - "application/json"
