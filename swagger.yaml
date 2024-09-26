@@ -6,8 +6,7 @@ info:
   title: "Wavlake Developer API"
   contact:
     email: "contact@wavlake.com"
-# host: "wavlake.com"
-host: "wavlake-com-git-staging-wavlake.vercel.app"
+host: "wavlake.com"
 basePath: "/api/v1"
 tags:
   - name: "content"
@@ -216,7 +215,7 @@ paths:
       tags:
         - "lnurl"
       summary: "Retrieves an LNURL string"
-      description: "Retrieve an LNURL pay request string for a specific piece of Wavlake content (e.g. a track) with an appId param for developers interested in receiving payment splits."
+      description: "Retrieve an LNURL pay request string for a specific piece of Wavlake content (e.g. a track). Required appId param credits developer with fee splits. Currently this only supports music tracks."
       operationId: "getLnurl"
       produces:
         - "application/json"
@@ -394,7 +393,7 @@ definitions:
   LnurlResponse:
     type: "object"
     properties:
-      payRequest:
+      lnurl:
         type: "string"
   ErrorResponse:
     type: "object"
