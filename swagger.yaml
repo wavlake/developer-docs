@@ -69,28 +69,33 @@ paths:
         - name: "startDate"
           in: "query"
           description: "Start date for rankings query"
-            type: "string"
+          required: false
+          type: "string"
           format: "date"
         - name: "endDate"
           in: "query"
           description: "End date for rankings query"
-            type: "string"
+          required: false
+          type: "string"
           format: "date"
         - name: "days"
           in: "query"
           description: "Number of days to include in rankings query"
-            type: "integer"
+          required: false
+          type: "integer"
           format: "int32"
           minimum: 1
           maximum: 90
         - name: "genre"
           in: "query"
           description: "Genre to filter rankings by"
-            type: "string"
+          required: false
+          type: "string"
         - name: "limit"
           in: "query"
           description: "Number of tracks to return"
-            type: "integer"
+          required: false
+          type: "integer"
           format: "int32"
           minimum: 1
           maximum: 100
@@ -118,7 +123,8 @@ paths:
         - name: "limit"
           in: "query"
           description: "Number of tracks per page (1-100, default 50)"
-            type: "integer"
+          required: false
+          type: "integer"
           format: "int32"
           minimum: 1
           maximum: 100
@@ -126,16 +132,19 @@ paths:
         - name: "cursor"
           in: "query"
           description: "Opaque cursor from the previous response's `nextCursor`. Omit for the first page."
-            type: "string"
+          required: false
+          type: "string"
         - name: "artistId"
           in: "query"
           description: "Only return tracks by this artist. An unknown id returns an empty page rather than an error."
-            type: "string"
+          required: false
+          type: "string"
           format: "uuid"
         - name: "genre"
           in: "query"
           description: "Only return tracks whose album is in this genre. Must be the exact genre name (case-insensitive, including punctuation such as `Dance/EDM` or `Children’s Music`); unknown names return 400."
-            type: "string"
+          required: false
+          type: "string"
       responses:
         200:
           description: "success"
