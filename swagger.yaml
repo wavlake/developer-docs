@@ -110,6 +110,50 @@ paths:
           description: "Invalid rankings query"
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /content/tracks:
+    get:
+      tags:
+        - "content"
+      summary: "Page through the full Wavlake music catalog"
+      description: "Returns every publicly listenable track, newest first, in pages of up to 100. To enumerate the whole catalog, request the first page without a `cursor`, then keep passing the `nextCursor` from each response until it comes back `null`. Cursors are opaque and stable: tracks published while you are paging never cause skips or duplicates. Optionally filter by artist or genre. List of genres can be found at: https://github.com/wavlake/genre-list"
+      operationId: "listCatalogTracks"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "limit"
+          in: "query"
+          description: "Number of tracks per page"
+          required: false
+          type: "integer"
+          format: "int32"
+          minimum: 1
+          maximum: 100
+          default: 50
+        - name: "cursor"
+          in: "query"
+          description: "Opaque cursor from the previous response's `nextCursor`. Omit for the first page."
+          required: false
+          type: "string"
+        - name: "artistId"
+          in: "query"
+          description: "Only return tracks by this artist"
+          required: false
+          type: "string"
+          format: "uuid"
+        - name: "genre"
+          in: "query"
+          description: "Only return tracks in this genre (name, case-insensitive)"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/CatalogTracksResponse"
+        400:
+          description: "Invalid limit, cursor, artistId or genre"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /content/track/{trackId}:
     get:
       tags:
@@ -318,6 +362,24 @@ definitions:
       releaseDate:
         type: "string"
         format: "date-time"
+  CatalogTracksResponse:
+    type: "object"
+    properties:
+      tracks:
+        type: "array"
+        items:
+          $ref: "#/definitions/TrackResponse"
+      nextCursor:
+        type: "string"
+        description: "Pass as `cursor` to fetch the next page. `null` on the last page."
+        x-nullable: true
+      total:
+        type: "integer"
+        format: "int32"
+        description: "Total number of tracks matching the filters"
+      limit:
+        type: "integer"
+        format: "int32"
   TrackResponse:
     type: "object"
     properties:
@@ -350,8 +412,12 @@ definitions:
         format: "date-time"
       msatTotal:
         type: "string"
+        description: "Lifetime sats earned, in millisats. Returned as a number by /content/tracks and as a string by /content/rankings."
       artistNpub:
         type: "string"
+      genre:
+        type: "string"
+        description: "Only populated by /content/tracks"
       order:
         type: "integer"
         format: "int32"
