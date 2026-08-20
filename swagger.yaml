@@ -110,6 +110,50 @@ paths:
           description: "Invalid rankings query"
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /content/tracks:
+    get:
+      tags:
+        - "content"
+      summary: "Retrieve the full Wavlake music catalog, one page at a time"
+      description: "Returns every publicly listenable track, newest first, in pages of up to 100. To enumerate the whole catalog, request the first page without a `cursor`, then keep passing the `nextCursor` from each response until it comes back `null`. Cursors are opaque, stateless and do not expire; they are independent of the filters, so use the same `artistId`/`genre` on every page of one crawl. Tracks published while you are paging never cause skips or duplicates. Responses are cached for up to 5 minutes, so brand-new tracks and `total` can lag slightly. Requests are rate limited per IP (30 per minute, slowed down after 15; a `429` with `Retry-After` means back off), so use `limit=100` for a full crawl. List of genres can be found at: https://github.com/wavlake/genre-list"
+      operationId: "listCatalogTracks"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "limit"
+          in: "query"
+          description: "Number of tracks per page (1-100, default 50)"
+          required: false
+          type: "integer"
+          format: "int32"
+          minimum: 1
+          maximum: 100
+          default: 50
+        - name: "cursor"
+          in: "query"
+          description: "Opaque cursor from the previous response's `nextCursor`. Omit for the first page."
+          required: false
+          type: "string"
+        - name: "artistId"
+          in: "query"
+          description: "Only return tracks by this artist. An unknown id returns an empty page rather than an error."
+          required: false
+          type: "string"
+          format: "uuid"
+        - name: "genre"
+          in: "query"
+          description: "Only return tracks whose album is in this genre. Must be the exact genre name (case-insensitive, including punctuation such as `Dance/EDM` or `Children’s Music`); unknown names return 400."
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/CatalogTracksResponse"
+        400:
+          description: "Invalid limit, cursor, artistId or genre"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /content/track/{trackId}:
     get:
       tags:
@@ -274,21 +318,16 @@ definitions:
       albumId:
         type: "string"
         format: "uuid"
-        required: false
       albumTitle:
         type: "string"
-        required: false
       artistId:
         type: "string"
         format: "uuid"
-        required: false
       artist:
         type: "string"
-        required: false
       duration:
         type: "integer"
         format: "int32"
-        required: false
   ArtistResponse:
     type: "object"
     properties:
@@ -318,6 +357,26 @@ definitions:
       releaseDate:
         type: "string"
         format: "date-time"
+  CatalogTracksResponse:
+    type: "object"
+    properties:
+      tracks:
+        type: "array"
+        items:
+          $ref: "#/definitions/TrackResponse"
+      nextCursor:
+        type: "string"
+        description: "Pass as `cursor` to fetch the next page. `null` on the last page."
+        x-nullable: true
+      total:
+        type: "integer"
+        format: "int32"
+        description: "Total number of tracks matching the filters. Only populated on the first page (no `cursor`); `null` on subsequent pages."
+        x-nullable: true
+      limit:
+        type: "integer"
+        format: "int32"
+        description: "Page size that was applied (50 when `limit` was omitted)"
   TrackResponse:
     type: "object"
     properties:
@@ -350,11 +409,16 @@ definitions:
         format: "date-time"
       msatTotal:
         type: "string"
+        description: "Earnings in millisats (1 sat = 1000 msat), serialized as a string. /content/tracks returns the track's lifetime total; /content/rankings returns the total within the requested date window."
       artistNpub:
         type: "string"
-      order:
-        type: "integer"
-        format: "int32"
+      genre:
+        type: "string"
+        description: "Genre name. Populated by /content/tracks (and playlist tracks); null when the album has no genre."
+        x-nullable: true
+      url:
+        type: "string"
+        description: "Wavlake web page for the track"
   AlbumResponse:
     type: "object"
     properties:
@@ -398,11 +462,6 @@ definitions:
   ErrorResponse:
     type: "object"
     properties:
-      code:
-        type: "integer"
-        format: "int32"
-      success:
-        type: "boolean"
       error:
         type: "string"
 externalDocs:
