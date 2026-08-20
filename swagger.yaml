@@ -376,7 +376,8 @@ definitions:
       total:
         type: "integer"
         format: "int32"
-        description: "Total number of tracks matching the filters"
+        description: "Total number of tracks matching the filters. Only populated on the first page (no `cursor`); `null` on subsequent pages."
+        x-nullable: true
       limit:
         type: "integer"
         format: "int32"
