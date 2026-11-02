@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "site": "https://dev.wavlake.com",
+  "status": "placeholder",
+  "sections": [
+    {
+      "id": "quickstart",
+      "title": "Quickstart"
+    },
+    {
+      "id": "concepts",
+      "title": "Concepts"
+    },
+    {
+      "id": "api-reference",
+      "title": "API reference"
+    },
+    {
+      "id": "event-reference",
+      "title": "Event reference"
+    },
+    {
+      "id": "agents-and-mcp",
+      "title": "Agents and MCP"
+    },
+    {
+      "id": "changelog",
+      "title": "Changelog"
+    }
+  ],
+  "pages": [
+    {
+      "path": "/",
+      "markdown": "/index.md",
+      "title": "Build on Wavlake",
+      "summary": "Docs for an open protocol and signed requests, written for people and the coding agents they work with.",
+      "section": "home",
+      "source": "guide",
+      "status": "coming-soon",
+      "anchors": [
+        "sections",
+        "for-coding-agents"
+      ]
+    },
+    {
+      "path": "/quickstart/",
+      "markdown": "/quickstart.md",
+      "title": "Quickstart",
+      "summary": "Where a new developer starts.",
+      "section": "quickstart",
+      "source": "guide",
+      "status": "coming-soon",
+      "anchors": [
+        "status",
+        "read-this-page-as-markdown"
+      ]
+    },
+    {
+      "path": "/concepts/",
+      "markdown": "/concepts.md",
+      "title": "Concepts",
+      "summary": "The ideas behind the open protocol and signed requests.",
+      "section": "concepts",
+      "source": "guide",
+      "status": "coming-soon",
+      "anchors": [
+        "status",
+        "read-this-page-as-markdown"
+      ]
+    },
+    {
+      "path": "/api-reference/",
+      "markdown": "/api-reference.md",
+      "title": "API reference",
+      "summary": "The REST API, call by call.",
+      "section": "api-reference",
+      "source": "guide",
+      "status": "coming-soon",
+      "anchors": [
+        "status",
+        "read-this-page-as-markdown"
+      ]
+    },
+    {
+      "path": "/event-reference/",
+      "markdown": "/event-reference.md",
+      "title": "Event reference",
+      "summary": "Events on the open protocol.",
+      "section": "event-reference",
+      "source": "guide",
+      "status": "coming-soon",
+      "anchors": [
+        "status",
+        "read-this-page-as-markdown"
+      ]
+    },
+    {
+      "path": "/agents-and-mcp/",
+      "markdown": "/agents-and-mcp.md",
+      "title": "Agents and MCP",
+      "summary": "How a coding agent reads this site.",
+      "section": "agents-and-mcp",
+      "source": "guide",
+      "status": "coming-soon",
+      "anchors": [
+        "status",
+        "for-coding-agents",
+        "mcp-connection-details",
+        "read-this-page-as-markdown"
+      ]
+    },
+    {
+      "path": "/changelog/",
+      "markdown": "/changelog.md",
+      "title": "Changelog",
+      "summary": "What changed on this site.",
+      "section": "changelog",
+      "source": "guide",
+      "status": "coming-soon",
+      "anchors": [
+        "status",
+        "read-this-page-as-markdown"
+      ]
+    }
+  ]
+}

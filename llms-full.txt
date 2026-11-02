@@ -1,0 +1,155 @@
+<!-- https://dev.wavlake.com/ -->
+
+# Build on Wavlake
+
+Docs for an open protocol and signed requests, written for people and the coding agents they work with.
+
+Coming soon.
+
+## Sections
+
+- [Quickstart](/quickstart/): Where a new developer starts. Coming soon.
+- [Concepts](/concepts/): The ideas behind the open protocol and signed requests. Coming soon.
+- [API reference](/api-reference/): The REST API, call by call. Coming soon.
+- [Event reference](/event-reference/): Events on the open protocol. Coming soon.
+- [Agents and MCP](/agents-and-mcp/): How a coding agent reads this site. Coming soon.
+- [Changelog](/changelog/): What changed on this site. Coming soon.
+
+## For coding agents
+
+- [/llms.txt](/llms.txt): A list of every page
+- [/llms-full.txt](/llms-full.txt): Every page in one file
+- [/pages.json](/pages.json): Every page and heading, as data
+- [/quickstart.md](/quickstart.md): Any page, with .md on the end
+
+---
+
+<!-- https://dev.wavlake.com/quickstart/ -->
+
+# Quickstart
+
+Where a new developer starts.
+
+## Status
+
+Coming soon. This page is a placeholder.
+
+## Read this page as Markdown
+
+Every page has a Markdown twin: the same address with `.md` on the end.
+
+```sh
+curl https://dev.wavlake.com/quickstart.md
+```
+
+---
+
+<!-- https://dev.wavlake.com/concepts/ -->
+
+# Concepts
+
+The ideas behind the open protocol and signed requests.
+
+## Status
+
+Coming soon. This page is a placeholder.
+
+## Read this page as Markdown
+
+Every page has a Markdown twin: the same address with `.md` on the end.
+
+```sh
+curl https://dev.wavlake.com/concepts.md
+```
+
+---
+
+<!-- https://dev.wavlake.com/api-reference/ -->
+
+# API reference
+
+The REST API, call by call.
+
+## Status
+
+Coming soon. This page is a placeholder.
+
+## Read this page as Markdown
+
+Every page has a Markdown twin: the same address with `.md` on the end.
+
+```sh
+curl https://dev.wavlake.com/api-reference.md
+```
+
+---
+
+<!-- https://dev.wavlake.com/event-reference/ -->
+
+# Event reference
+
+Events on the open protocol.
+
+## Status
+
+Coming soon. This page is a placeholder.
+
+## Read this page as Markdown
+
+Every page has a Markdown twin: the same address with `.md` on the end.
+
+```sh
+curl https://dev.wavlake.com/event-reference.md
+```
+
+---
+
+<!-- https://dev.wavlake.com/agents-and-mcp/ -->
+
+# Agents and MCP
+
+How a coding agent reads this site.
+
+## Status
+
+Coming soon. This page is a placeholder.
+
+## For coding agents
+
+This site is made to be read by a coding agent as well as a person.
+
+- [llms.txt](/llms.txt) lists every page.
+- [llms-full.txt](/llms-full.txt) holds every page in one file.
+- [pages.json](/pages.json) lists every page and heading as data.
+
+## MCP connection details
+
+Coming soon. This space is reserved.
+
+## Read this page as Markdown
+
+Every page has a Markdown twin: the same address with `.md` on the end.
+
+```sh
+curl https://dev.wavlake.com/agents-and-mcp.md
+```
+
+---
+
+<!-- https://dev.wavlake.com/changelog/ -->
+
+# Changelog
+
+What changed on this site.
+
+## Status
+
+Coming soon. This page is a placeholder.
+
+## Read this page as Markdown
+
+Every page has a Markdown twin: the same address with `.md` on the end.
+
+```sh
+curl https://dev.wavlake.com/changelog.md
+```

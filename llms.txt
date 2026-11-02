@@ -1,0 +1,22 @@
+# Wavlake developers
+
+> The Wavlake developer site, for people and their coding agents. It is a shell for now.
+
+Every page here is a placeholder that says coming soon. This site has no guides, API details or event details yet.
+
+## Pages
+
+- [Build on Wavlake](https://dev.wavlake.com/index.md): Docs for an open protocol and signed requests, written for people and the coding agents they work with.
+- [Quickstart](https://dev.wavlake.com/quickstart.md): Where a new developer starts.
+- [Concepts](https://dev.wavlake.com/concepts.md): The ideas behind the open protocol and signed requests.
+- [API reference](https://dev.wavlake.com/api-reference.md): The REST API, call by call.
+- [Event reference](https://dev.wavlake.com/event-reference.md): Events on the open protocol.
+- [Agents and MCP](https://dev.wavlake.com/agents-and-mcp.md): How a coding agent reads this site.
+- [Changelog](https://dev.wavlake.com/changelog.md): What changed on this site.
+
+## Files
+
+- [llms-full.txt](https://dev.wavlake.com/llms-full.txt): Every page, in one file.
+- [pages.json](https://dev.wavlake.com/pages.json): Every page and anchor, as data.
+- [sitemap.xml](https://dev.wavlake.com/sitemap.xml): Every page address.
+
