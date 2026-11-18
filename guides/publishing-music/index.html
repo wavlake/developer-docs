@@ -1,0 +1,169 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Publishing music | Wavlake developers</title><meta name="description" content="How an app publishes a track or a release that Wavlake hosts, with one signed call."><link rel="canonical" href="https://dev.wavlake.com/guides/publishing-music/"><link rel="alternate" type="text/markdown" href="/guides/publishing-music.md"><link rel="llms-txt" href="/llms.txt"><link rel="icon" href="/favicon.ico" sizes="any"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#000000"><script>
+      document.documentElement.classList.add('js');
+      try {
+        if (localStorage.getItem('wavlake-dev-theme') === 'light') {
+          document.documentElement.dataset.theme = 'light';
+        }
+      } catch {
+        /* No storage: stay on the default theme. */
+      }
+    </script><link rel="stylesheet" href="/_astro/Base.DoT3iGsQ.css"></head><body><a class="skip" href="#content">Skip to content</a><header class="top"><a class="brand" href="/"><img src="/wavlake-icon-128.png" alt="Wavlake" width="28" height="28"><span>Wavlake developers</span></a><div class="top-tools"><button class="search-button" type="button" popovertarget="search-panel"><span>Search</span><kbd class="js-only" data-other-hint="Ctrl K">⌘K</kbd></button><button class="theme-button js-only" type="button" aria-label="Switch to light theme" data-theme-toggle data-to-light="Switch to light theme" data-to-dark="Switch to dark theme"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"></path></svg></button></div><div id="search-panel" class="search" popover role="dialog" aria-label="Search this site"><input class="search-input js-only" type="search" placeholder="Find a page" aria-label="Search this site" autocomplete="off" data-search-input><ul class="search-list"><li data-search-item="build on wavlake docs for an open protocol and signed requests, written for people and the coding agents they work with."><a href="/"><span class="search-title">Build on Wavlake</span><span class="search-summary">Docs for an open protocol and signed requests, written for people and the coding agents they work with.</span></a></li><li data-search-item="quickstart where a new developer starts."><a href="/quickstart/"><span class="search-title">Quickstart</span><span class="search-summary">Where a new developer starts.</span></a></li><li data-search-item="concepts the ideas behind the open protocol and signed requests."><a href="/concepts/"><span class="search-title">Concepts</span><span class="search-summary">The ideas behind the open protocol and signed requests.</span></a></li><li data-search-item="api reference the rest api, call by call."><a href="/api-reference/"><span class="search-title">API reference</span><span class="search-summary">The REST API, call by call.</span></a></li><li data-search-item="publishing music how an app publishes a track or a release that wavlake hosts, with one signed call."><a href="/guides/publishing-music/"><span class="search-title">Publishing music</span><span class="search-summary">How an app publishes a track or a release that Wavlake hosts, with one signed call.</span></a></li><li data-search-item="event reference events on the open protocol."><a href="/event-reference/"><span class="search-title">Event reference</span><span class="search-summary">Events on the open protocol.</span></a></li><li data-search-item="agents and mcp how a coding agent reads this site."><a href="/agents-and-mcp/"><span class="search-title">Agents and MCP</span><span class="search-summary">How a coding agent reads this site.</span></a></li><li data-search-item="changelog what changed on this site."><a href="/changelog/"><span class="search-title">Changelog</span><span class="search-summary">What changed on this site.</span></a></li></ul><p class="search-empty" hidden data-search-empty>No page matches that.</p></div></header><div class="frame"><div class="frame-side"><nav aria-label="Sections"><ul class="side"><li><a href="/quickstart/">Quickstart</a></li><li><a href="/concepts/">Concepts</a></li><li><a href="/api-reference/">API reference</a><ul><li><a href="/guides/publishing-music/" aria-current="page">Publishing music</a></li></ul></li><li><a href="/event-reference/">Event reference</a></li><li><a href="/agents-and-mcp/">Agents and MCP</a></li><li><a href="/changelog/">Changelog</a></li></ul></nav></div><main id="content" class="frame-main"><details class="fold"><summary>Menu</summary><nav aria-label="Sections"><ul class="side"><li><a href="/quickstart/">Quickstart</a></li><li><a href="/concepts/">Concepts</a></li><li><a href="/api-reference/">API reference</a><ul><li><a href="/guides/publishing-music/" aria-current="page">Publishing music</a></li></ul></li><li><a href="/event-reference/">Event reference</a></li><li><a href="/agents-and-mcp/">Agents and MCP</a></li><li><a href="/changelog/">Changelog</a></li></ul></nav></details><header class="article-head"><h1>Publishing music</h1><p class="article-summary">How an app publishes a track or a release that Wavlake hosts, with one signed call.</p><div class="actions"><button class="action js-only" type="button" data-markdown="/guides/publishing-music.md" data-copied="Copied" data-failed="Could not copy. Open the Markdown page instead.">Copy as Markdown</button><a class="action" href="/guides/publishing-music.md">View Markdown</a><span class="action-status" role="status" data-copy-status></span></div></header><details class="fold"><summary>On this page</summary><nav aria-label="On this page"><ul class="contents"><li class="depth-2"><a href="#who-can-publish">Who can publish</a></li><li class="depth-2"><a href="#signing-the-request">Signing the request</a></li><li class="depth-2"><a href="#the-request">The request</a></li><li class="depth-2"><a href="#what-it-checks">What it checks</a></li><li class="depth-2"><a href="#the-answer">The answer</a></li><li class="depth-2"><a href="#writing-to-the-catalog-directly">Writing to the catalog directly</a></li><li class="depth-2"><a href="#on-or-off-per-server">On or off, per server</a></li><li class="depth-2"><a href="#read-this-page-as-markdown">Read this page as Markdown</a></li></ul></nav></details><article class="prose"><p>This guide is for an app that publishes music for an artist whose audio is hosted on Wavlake.</p>
+<p>Wavlake’s new platform is not open to the public yet. The addresses on this page answer once it is.</p>
+<p><code>relay.wavlake.com</code> carries Wavlake-hosted music only. A track or a release, and every edit of one, reaches it through one door: Wavlake’s API,</p>
+<p><code>POST https://stream.wavlake.com/api/v1/music/publish</code></p>
+<p>The API checks the events and writes them to the relay itself. Everything else an app writes is not judged by this rule and goes to the relay directly, signed by any key: a playlist (the list event a release uses, without the <code>["t", "album"]</code> tag), a deletion request, a channel definition and a comment.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>You want to</th><th>Do this</th></tr></thead><tbody><tr><td>Publish or edit a track or release whose audio is on Wavlake</td><td>Sign the events with the artist’s key and send them to the publish call</td></tr><tr><td>Delete a track or release</td><td>Sign a deletion request and send it to the relay directly</td></tr><tr><td>Publish music hosted somewhere else</td><td>Publish it to your own relays. Wavlake does not show it, and <code>relay.wavlake.com</code> does not take it while the rule below is on</td></tr></tbody></table>
+<h2 id="who-can-publish"><a href="#who-can-publish">Who can publish</a></h2>
+<p>The artist’s key. The request is signed with NIP-98 (below). The key must belong to a Wavlake account, because uploading needs one: a key with no account is answered <code>401 PUBKEY_NOT_LINKED</code>. The audio must already be uploaded through Wavlake by that key, and the release’s hosting paid. Uploading and paying for hosting are not covered here: an app can publish what the artist uploaded on Wavlake.</p>
+<h2 id="signing-the-request"><a href="#signing-the-request">Signing the request</a></h2>
+<p>The request carries the HTTP auth event NIP-98 describes, signed by the artist’s key, in one header:</p>
+<pre class="astro-code astro-code-themes wavlake-dark wavlake-light" style="--shiki-dark:#e5e5e8;--shiki-light:#171717;--shiki-dark-bg:#1e1e1e;--shiki-light-bg:#fffffe; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Authorization: Nostr BASE64_OF_THE_SIGNED_EVENT_JSON</span></span></code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Rule</th><th>Detail</th></tr></thead><tbody><tr><td><code>content</code></td><td>Empty</td></tr><tr><td><code>u</code> tag</td><td>The full address you are requesting, exactly as sent</td></tr><tr><td><code>method</code> tag</td><td><code>POST</code></td></tr><tr><td><code>payload</code> tag</td><td>Hex SHA-256 of the exact body bytes. Send the same bytes you hashed</td></tr><tr><td><code>created_at</code></td><td>Within 60 seconds of the server’s clock, either side</td></tr><tr><td>Encoding</td><td>Standard base64, with padding</td></tr><tr><td>One event per request</td><td>An auth event can be used once. Sign a new one for every attempt, a retry included, and add a random <code>nonce</code> tag so two events signed in the same second differ</td></tr></tbody></table>
+<h2 id="the-request"><a href="#the-request">The request</a></h2>
+<pre class="astro-code astro-code-themes wavlake-dark wavlake-light" style="--shiki-dark:#e5e5e8;--shiki-light:#171717;--shiki-dark-bg:#1e1e1e;--shiki-light-bg:#fffffe; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">{</span></span>
+<span class="line"><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">  "release"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: { </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"..."</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"the signed release, exactly as signed"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717"> },</span></span>
+<span class="line"><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">  "tracks"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: [{ </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"..."</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"each signed track, exactly as signed"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717"> }]</span></span>
+<span class="line"><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">}</span></span></code></pre>
+<ul>
+<li><code>release</code> and <code>tracks</code> are signed events, sent exactly as signed: 1 to 30 tracks, all of one release. Send only <code>tracks</code> to retry the tracks a release left behind.</li>
+<li><code>confirm_release</code> and <code>confirm_tracks</code> (<code>{ "d_tag", "event_id" }</code>) name events the relay already holds: they go through the same checks and are recorded without being written again. Use them when a publish landed and you lost the answer.</li>
+<li>The body may be up to 4 MiB.</li>
+</ul>
+<h2 id="what-it-checks"><a href="#what-it-checks">What it checks</a></h2>
+<p>Every check runs over the whole request before anything is written. Any refusal answers with nothing written.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Check</th><th>Refused with</th></tr></thead><tbody><tr><td>Every event is signed by the key that signed the request</td><td><code>403 MUSIC_NOT_UPLOADER</code></td></tr><tr><td>Wavlake hosts the audio: Wavlake holds an upload at the track’s d-tag, and its <code>audio</code> and <code>url</code> values are that upload’s own address on a Wavlake host</td><td><code>409 MUSIC_NOT_HOSTED</code></td></tr><tr><td>The signer is the key that uploaded the audio, and a release lists only that key’s tracks</td><td><code>403 MUSIC_NOT_UPLOADER</code></td></tr><tr><td>The item has not been taken down. A taken-down item stays refused</td><td><code>410 MUSIC_REMOVED</code></td></tr><tr><td>The release’s hosting is paid</td><td><code>402 HOSTING_PAYMENT_REQUIRED</code></td></tr><tr><td>Each track and release carries one podcast GUID: <code>["i", "podcast:item:guid:GUID"]</code> with <code>["k", "podcast:item:guid"]</code> on a track, <code>["i", "podcast:guid:GUID"]</code> with <code>["k", "podcast:guid"]</code> on a release</td><td><code>400 MUSIC_GUID_REQUIRED</code></td></tr><tr><td>The GUID is the one the track or release first went out with, and no other live track or release holds it</td><td><code>409 MUSIC_GUID_CHANGED</code>, <code>409 MUSIC_GUID_TAKEN</code></td></tr></tbody></table>
+<p>A refusal from the first four carries <code>details: { "check": "not_hosted" | "not_uploader" | "removed", "d_tags": [...] }</code>, and one about the GUID carries <code>"check": "guid_missing" | "guid_changed" | "guid_taken"</code>. Podcast apps name a track or release by its GUID, so it never changes: an edit carries the GUID the live event has. The call also refuses a request that does not agree with what the artist saved on Wavlake: the audio expired or not ready (<code>AUDIO_EXPIRED</code>, <code>audio_not_ready</code>), a different channel (<code>MUSIC_HOME_MISMATCH</code>), a track uploaded for another release (<code>RELEASE_TRACK_MISMATCH</code>), a <code>purchase</code> tag that differs from the saved price (<code>PURCHASE_PRICE_MISMATCH</code>), a new release with no genre (<code>RELEASE_GENRE_REQUIRED</code>) or a whole-release offer Wavlake cannot sell (<code>RELEASE_OFFER_TOO_FEW_TRACKS</code>, <code>RELEASE_NOT_SELLABLE</code>). These are <code>409</code>. A check that cannot answer is <code>503</code>: retry.</p>
+<h2 id="the-answer"><a href="#the-answer">The answer</a></h2>
+<p>When the checks pass, the API writes the release first, then each track, reads them back, and answers <code>200</code> with one result per event:</p>
+<pre class="astro-code astro-code-themes wavlake-dark wavlake-light" style="--shiki-dark:#e5e5e8;--shiki-light:#171717;--shiki-dark-bg:#1e1e1e;--shiki-light-bg:#fffffe; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">{</span></span>
+<span class="line"><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">  "complete"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">true</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">,</span></span>
+<span class="line"><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">  "release"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: { </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"d_tag"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"…"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">, </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"event_id"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"…"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">, </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"status"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"published"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">, </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"on_relay"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">true</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">, </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"recorded"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">true</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717"> },</span></span>
+<span class="line"><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">  "tracks"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: [{ </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"d_tag"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"…"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">, </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"event_id"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"…"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">, </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"status"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"published"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">, </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"on_relay"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">true</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">, </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"recorded"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">true</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">, </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"published_at"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">: </span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12">"…"</span><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717"> }]</span></span>
+<span class="line"><span style="--shiki-dark:#E5E5E8;--shiki-light:#171717">}</span></span></code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th><code>status</code></th><th>Meaning</th></tr></thead><tbody><tr><td><code>published</code></td><td>On the relay, read back, and recorded</td></tr><tr><td><code>retry</code></td><td>Not finished. Send it again; nothing is charged. If <code>on_relay</code> is true the relay holds it: name it in <code>confirm_*</code> instead of signing again. If false, sign it again</td></tr><tr><td><code>refused</code></td><td>Sending the same event again will not help. <code>error_code</code> and <code>message</code> say why; <code>relay_reason</code> is the relay’s own words, for your logs</td></tr></tbody></table>
+<p><code>complete</code> is true when every event in the request is <code>published</code>. A release that does not reach the relay stops the call with nothing written: <code>409 RELAY_REFUSED</code> (the relay’s words are in <code>details.relay_reason</code>) or <code>503</code>. The call is safe to repeat, whole or in part.</p>
+<h2 id="writing-to-the-catalog-directly"><a href="#writing-to-the-catalog-directly">Writing to the catalog directly</a></h2>
+<p>A track or release sent straight to <code>relay.wavlake.com</code>, from anywhere but Wavlake’s API, is answered with a NIP-01 <code>OK</code> false. The address at the end is this guide:</p>
+<pre class="astro-code astro-code-themes wavlake-dark wavlake-light" style="--shiki-dark:#e5e5e8;--shiki-light:#171717;--shiki-dark-bg:#1e1e1e;--shiki-light-bg:#fffffe; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>["OK", "EVENT_ID", false, "restricted: music on this relay is published through Wavlake. Upload at wavlake.com, or publish with Wavlake's API: GUIDE_ADDRESS"]</span></span></code></pre>
+<p><code>restricted:</code> is final: sending the same event to the relay again will not help. Send it to the publish call. A product listing follows the same rule, with its own words: <code>restricted: product listings on this relay are published through Wavlake. List a product at wavlake.com, or with Wavlake's API: GUIDE_ADDRESS</code>. The relay’s NIP-11 document sets <code>limitation.restricted_writes</code> to <code>true</code>, and its <code>posting_policy</code> names the same guide address.</p>
+<h2 id="on-or-off-per-server"><a href="#on-or-off-per-server">On or off, per server</a></h2>
+<p>The rule is a setting on each relay, not part of the protocol. The relay accepts a track or a release only from the private network Wavlake’s API writes from; with the setting unset, it accepts music from any source. Each Wavlake relay is switched separately. The publish call works either way, so use it for every track and release and you need not know which.</p>
+<h2 id="read-this-page-as-markdown"><a href="#read-this-page-as-markdown">Read this page as Markdown</a></h2>
+<p>Every page has a Markdown twin: the same address with <code>.md</code> on the end.</p>
+<pre class="astro-code astro-code-themes wavlake-dark wavlake-light" style="--shiki-dark:#e5e5e8;--shiki-light:#171717;--shiki-dark-bg:#1e1e1e;--shiki-light-bg:#fffffe; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="--shiki-dark:#FFFFFF;--shiki-light:#171717">curl</span><span style="--shiki-dark:#FFBD9D;--shiki-light:#8A3D12"> https://dev.wavlake.com/guides/publishing-music.md</span></span></code></pre></article><nav class="pager" aria-label="Previous and next page"><a class="pager-previous" href="/api-reference/" rel="prev"><span>Previous</span>API reference</a><a class="pager-next" href="/event-reference/" rel="next"><span>Next</span>Event reference</a></nav></main><div class="frame-contents"><nav aria-label="On this page"><p class="contents-label">On this page</p><ul class="contents"><li class="depth-2"><a href="#who-can-publish">Who can publish</a></li><li class="depth-2"><a href="#signing-the-request">Signing the request</a></li><li class="depth-2"><a href="#the-request">The request</a></li><li class="depth-2"><a href="#what-it-checks">What it checks</a></li><li class="depth-2"><a href="#the-answer">The answer</a></li><li class="depth-2"><a href="#writing-to-the-catalog-directly">Writing to the catalog directly</a></li><li class="depth-2"><a href="#on-or-off-per-server">On or off, per server</a></li><li class="depth-2"><a href="#read-this-page-as-markdown">Read this page as Markdown</a></li></ul></nav></div></div><script type="module">var e=document.documentElement;function t(){let t=document.querySelector(`[data-theme-toggle]`);if(!t)return;let n=()=>{let n=e.dataset.theme===`light`;t.setAttribute(`aria-label`,(n?t.dataset.toDark:t.dataset.toLight)??``)};n(),t.addEventListener(`click`,()=>{let t=e.dataset.theme===`light`?`dark`:`light`;t===`light`?e.dataset.theme=`light`:delete e.dataset.theme;try{localStorage.setItem(`wavlake-dev-theme`,t)}catch{}n()})}function n(){let e=document.querySelector(`#search-panel`),t=e?.querySelector(`[data-search-input]`),n=e?.querySelector(`[data-search-empty]`);if(!e||!t||!n)return;let r=[...e.querySelectorAll(`[data-search-item]`)],i=document.querySelector(`[data-other-hint]`);i&&!/mac|iphone|ipad/i.test(navigator.userAgent)&&(i.textContent=i.dataset.otherHint??``),document.addEventListener(`keydown`,t=>{(t.metaKey||t.ctrlKey)&&t.key.toLowerCase()===`k`&&(t.preventDefault(),e.togglePopover())}),e.addEventListener(`toggle`,e=>{e.newState===`open`&&t.focus()}),t.addEventListener(`input`,()=>{let e=t.value.trim().toLowerCase(),i=0;for(let t of r){let n=(t.dataset.searchItem??``).includes(e);t.hidden=!n,n&&(i+=1)}n.hidden=i>0}),t.addEventListener(`keydown`,e=>{e.key===`Enter`&&(e.preventDefault(),r.find(e=>!e.hidden)?.querySelector(`a`)?.click())})}async function r(e){let t=fetch(e).then(e=>{if(!e.ok)throw Error(String(e.status));return e.text()});if(typeof ClipboardItem==`function`&&navigator.clipboard?.write){let e=t.then(e=>new Blob([e],{type:`text/plain`}));await navigator.clipboard.write([new ClipboardItem({"text/plain":e})])}else await navigator.clipboard.writeText(await t)}function i(){for(let e of document.querySelectorAll(`[data-markdown]`)){let t=e.parentElement?.querySelector(`[data-copy-status]`);e.addEventListener(`click`,()=>{r(e.dataset.markdown??``).then(()=>{t&&(t.textContent=e.dataset.copied??``)},()=>{t&&(t.textContent=e.dataset.failed??``)})})}}t(),n(),i();</script></body></html>

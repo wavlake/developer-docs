@@ -1,0 +1,112 @@
+# Publishing music
+
+How an app publishes a track or a release that Wavlake hosts, with one signed call.
+
+This guide is for an app that publishes music for an artist whose audio is hosted on Wavlake.
+
+Wavlake's new platform is not open to the public yet. The addresses on this page answer once it is.
+
+`relay.wavlake.com` carries Wavlake-hosted music only. A track or a release, and every edit of one, reaches it through one door: Wavlake's API,
+
+`POST https://stream.wavlake.com/api/v1/music/publish`
+
+The API checks the events and writes them to the relay itself. Everything else an app writes is not judged by this rule and goes to the relay directly, signed by any key: a playlist (the list event a release uses, without the `["t", "album"]` tag), a deletion request, a channel definition and a comment.
+
+| You want to | Do this |
+| --- | --- |
+| Publish or edit a track or release whose audio is on Wavlake | Sign the events with the artist's key and send them to the publish call |
+| Delete a track or release | Sign a deletion request and send it to the relay directly |
+| Publish music hosted somewhere else | Publish it to your own relays. Wavlake does not show it, and `relay.wavlake.com` does not take it while the rule below is on |
+
+## Who can publish
+
+The artist's key. The request is signed with NIP-98 (below). The key must belong to a Wavlake account, because uploading needs one: a key with no account is answered `401 PUBKEY_NOT_LINKED`. The audio must already be uploaded through Wavlake by that key, and the release's hosting paid. Uploading and paying for hosting are not covered here: an app can publish what the artist uploaded on Wavlake.
+
+## Signing the request
+
+The request carries the HTTP auth event NIP-98 describes, signed by the artist's key, in one header:
+
+```
+Authorization: Nostr BASE64_OF_THE_SIGNED_EVENT_JSON
+```
+
+| Rule | Detail |
+| --- | --- |
+| `content` | Empty |
+| `u` tag | The full address you are requesting, exactly as sent |
+| `method` tag | `POST` |
+| `payload` tag | Hex SHA-256 of the exact body bytes. Send the same bytes you hashed |
+| `created_at` | Within 60 seconds of the server's clock, either side |
+| Encoding | Standard base64, with padding |
+| One event per request | An auth event can be used once. Sign a new one for every attempt, a retry included, and add a random `nonce` tag so two events signed in the same second differ |
+
+## The request
+
+```json
+{
+  "release": { "...": "the signed release, exactly as signed" },
+  "tracks": [{ "...": "each signed track, exactly as signed" }]
+}
+```
+
+- `release` and `tracks` are signed events, sent exactly as signed: 1 to 30 tracks, all of one release. Send only `tracks` to retry the tracks a release left behind.
+- `confirm_release` and `confirm_tracks` (`{ "d_tag", "event_id" }`) name events the relay already holds: they go through the same checks and are recorded without being written again. Use them when a publish landed and you lost the answer.
+- The body may be up to 4 MiB.
+
+## What it checks
+
+Every check runs over the whole request before anything is written. Any refusal answers with nothing written.
+
+| Check | Refused with |
+| --- | --- |
+| Every event is signed by the key that signed the request | `403 MUSIC_NOT_UPLOADER` |
+| Wavlake hosts the audio: Wavlake holds an upload at the track's d-tag, and its `audio` and `url` values are that upload's own address on a Wavlake host | `409 MUSIC_NOT_HOSTED` |
+| The signer is the key that uploaded the audio, and a release lists only that key's tracks | `403 MUSIC_NOT_UPLOADER` |
+| The item has not been taken down. A taken-down item stays refused | `410 MUSIC_REMOVED` |
+| The release's hosting is paid | `402 HOSTING_PAYMENT_REQUIRED` |
+| Each track and release carries one podcast GUID: `["i", "podcast:item:guid:GUID"]` with `["k", "podcast:item:guid"]` on a track, `["i", "podcast:guid:GUID"]` with `["k", "podcast:guid"]` on a release | `400 MUSIC_GUID_REQUIRED` |
+| The GUID is the one the track or release first went out with, and no other live track or release holds it | `409 MUSIC_GUID_CHANGED`, `409 MUSIC_GUID_TAKEN` |
+
+A refusal from the first four carries `details: { "check": "not_hosted" | "not_uploader" | "removed", "d_tags": [...] }`, and one about the GUID carries `"check": "guid_missing" | "guid_changed" | "guid_taken"`. Podcast apps name a track or release by its GUID, so it never changes: an edit carries the GUID the live event has. The call also refuses a request that does not agree with what the artist saved on Wavlake: the audio expired or not ready (`AUDIO_EXPIRED`, `audio_not_ready`), a different channel (`MUSIC_HOME_MISMATCH`), a track uploaded for another release (`RELEASE_TRACK_MISMATCH`), a `purchase` tag that differs from the saved price (`PURCHASE_PRICE_MISMATCH`), a new release with no genre (`RELEASE_GENRE_REQUIRED`) or a whole-release offer Wavlake cannot sell (`RELEASE_OFFER_TOO_FEW_TRACKS`, `RELEASE_NOT_SELLABLE`). These are `409`. A check that cannot answer is `503`: retry.
+
+## The answer
+
+When the checks pass, the API writes the release first, then each track, reads them back, and answers `200` with one result per event:
+
+```json
+{
+  "complete": true,
+  "release": { "d_tag": "…", "event_id": "…", "status": "published", "on_relay": true, "recorded": true },
+  "tracks": [{ "d_tag": "…", "event_id": "…", "status": "published", "on_relay": true, "recorded": true, "published_at": "…" }]
+}
+```
+
+| `status` | Meaning |
+| --- | --- |
+| `published` | On the relay, read back, and recorded |
+| `retry` | Not finished. Send it again; nothing is charged. If `on_relay` is true the relay holds it: name it in `confirm_*` instead of signing again. If false, sign it again |
+| `refused` | Sending the same event again will not help. `error_code` and `message` say why; `relay_reason` is the relay's own words, for your logs |
+
+`complete` is true when every event in the request is `published`. A release that does not reach the relay stops the call with nothing written: `409 RELAY_REFUSED` (the relay's words are in `details.relay_reason`) or `503`. The call is safe to repeat, whole or in part.
+
+## Writing to the catalog directly
+
+A track or release sent straight to `relay.wavlake.com`, from anywhere but Wavlake's API, is answered with a NIP-01 `OK` false. The address at the end is this guide:
+
+```
+["OK", "EVENT_ID", false, "restricted: music on this relay is published through Wavlake. Upload at wavlake.com, or publish with Wavlake's API: GUIDE_ADDRESS"]
+```
+
+`restricted:` is final: sending the same event to the relay again will not help. Send it to the publish call. A product listing follows the same rule, with its own words: `restricted: product listings on this relay are published through Wavlake. List a product at wavlake.com, or with Wavlake's API: GUIDE_ADDRESS`. The relay's NIP-11 document sets `limitation.restricted_writes` to `true`, and its `posting_policy` names the same guide address.
+
+## On or off, per server
+
+The rule is a setting on each relay, not part of the protocol. The relay accepts a track or a release only from the private network Wavlake's API writes from; with the setting unset, it accepts music from any source. Each Wavlake relay is switched separately. The publish call works either way, so use it for every track and release and you need not know which.
+
+## Read this page as Markdown
+
+Every page has a Markdown twin: the same address with `.md` on the end.
+
+```sh
+curl https://dev.wavlake.com/guides/publishing-music.md
+```

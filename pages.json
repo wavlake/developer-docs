@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "site": "https://dev.wavlake.com",
-  "status": "placeholder",
+  "status": "partial",
   "sections": [
     {
       "id": "quickstart",
@@ -78,6 +78,25 @@
       "status": "coming-soon",
       "anchors": [
         "status",
+        "read-this-page-as-markdown"
+      ]
+    },
+    {
+      "path": "/guides/publishing-music/",
+      "markdown": "/guides/publishing-music.md",
+      "title": "Publishing music",
+      "summary": "How an app publishes a track or a release that Wavlake hosts, with one signed call.",
+      "section": "api-reference",
+      "source": "guide",
+      "status": "written",
+      "anchors": [
+        "who-can-publish",
+        "signing-the-request",
+        "the-request",
+        "what-it-checks",
+        "the-answer",
+        "writing-to-the-catalog-directly",
+        "on-or-off-per-server",
         "read-this-page-as-markdown"
       ]
     },
